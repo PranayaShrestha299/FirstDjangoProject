@@ -1,0 +1,43 @@
+<style>
+    .search-bar {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Welcome to the home page</h1>
+<hr>
+<div class="search-bar">
+    <h2>Browse Topics</h2>
+    <hr>
+    <div>
+        {% for topic in topics %}
+        <a href="{% url 'home'%}?q={{topic.name}}">{{ topic.name }}</a><br>
+        {% endfor %}
+    </div>
+    
+
+<div>
+    <a href="{% url 'create-room' %}">Create a new room</a><hr>
+<div>
+    {% for room in rooms %}
+    <div>
+        <a href="{%url 'update-room' room.id %}">Edit</a><br>
+        <a href="{%url 'delete-room' room.id %}">Delete</a><br>
+        <span>@{{room.host.username}}</span><br>
+        {{ room.id }} -- <a href="{% url 'room' room.id %}">{{ room.name }}</a><br>
+        
+        <small>{{room.topic.name}}</small>
+        <hr>
+    </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+{% endblock content %}
+
+
+
+
