@@ -18,7 +18,8 @@ def home(request):
                                 Q(name__icontains=q) |
                                 Q(description__icontains=q))
     topics=Topic.objects.all()
-    context = {'rooms': rooms,'topics':topics} # 'rooms' is the variable name used in the template
+    room_count = rooms.count()
+    context = {'rooms': rooms,'topics':topics,'room_count':room_count} # 'rooms' is the variable name used in the template
     return render(request, 'base/home.html',context)
 
 def about(request):
