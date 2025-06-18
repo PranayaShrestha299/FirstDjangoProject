@@ -1,9 +1,12 @@
+from django.contrib import messages
 from multiprocessing import context
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Room
 from .forms import RoomForm
 from .models import Topic
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -11,6 +14,26 @@ from .models import Topic
 #    {'id': 1, 'name': 'Room A'},
 #    {'id': 2, 'name': 'Room B'},
 #    {'id': 3, 'name': 'Room C'}, ]
+
+def loginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # Logic to authenticate user goes here
+        try:
+            user = User.objects.get(username=username)  
+        
+        except :
+            # User does not exist
+            messages.error(request, 'User does not exist')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username OR Password is incorrect')
+    context={}
+    return render(request,'base/login_register.html',context)
 
 def home(request):
     q=request.GET.get('q') if request.GET.get('q') != None else ''
@@ -57,5 +80,8 @@ def deleteroom(request, pk):
         return redirect('home')
    
     return render(request, 'base/delete.html', {'obj':room})
+
+
+
     
 
