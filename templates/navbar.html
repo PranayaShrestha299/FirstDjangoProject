@@ -2,8 +2,12 @@
     <h1>LOGO</h1>
 </a>
 <a href="{% url 'login' %}">Login</a>
-<hr>
-<form method="get" action="{% url 'home' %}" >
-    <input type="text" name="q" placeholder="Search Rooms"/>
+<br>
+<h1>{{room.host.username}}</h1>
+<br>
+
+    <hr>
+    <form method="get" action="{% url 'home' %}" >
+        <input type="text" name="q" placeholder="Search Rooms"/>
 </form>
 <hr>

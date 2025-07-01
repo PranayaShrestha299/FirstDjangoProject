@@ -1,5 +1,5 @@
 from django.contrib import messages
-from multiprocessing import context
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Room
@@ -7,6 +7,7 @@ from .forms import RoomForm
 from .models import Topic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -52,6 +53,8 @@ def room(request,pk):
     room=Room.objects.get(id=pk)
     context = {'room': room}  # 'room' is the variable name used in the template
     return render(request, 'base/room.html', context)
+
+@login_required(login_url='login')
 def createroom(request):
     form=RoomForm();
     if request.method == 'POST':
@@ -62,9 +65,13 @@ def createroom(request):
     context={'form': form}
     return render(request, 'base/room_form.html',context)
 
+@login_required(login_url='login')
 def updateroom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
+    if(room.host != request.user):
+        return HttpResponse('You are not allowed here!!')
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
@@ -73,8 +80,11 @@ def updateroom(request, pk):
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
 
+@login_required(login_url='login')
 def deleteroom(request, pk):
     room = Room.objects.get(id=pk)
+    if(room.host != request.user):
+        return HttpResponse('You are not allowed here!!')
     if request.method == 'POST':
         room.delete()
         return redirect('home')
