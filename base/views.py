@@ -32,6 +32,10 @@ def loginRegister(request):
     
     return render(request,'base/login_register.html',{'page':page,'form':form})
 
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
+
 def loginPage(request):
     page='login'
 
