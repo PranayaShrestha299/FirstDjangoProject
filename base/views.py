@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -84,6 +85,8 @@ def createroom(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
+            form=form.save(commit=False)
+            form.host=request.user
             form.save()
             return redirect('home')
     context={'form': form}
@@ -114,6 +117,11 @@ def deleteroom(request, pk):
         return redirect('home')
    
     return render(request, 'base/delete.html', {'obj':room})
+
+def userProfile(request,pk):
+    user=User.objects.get(id=pk)
+    context={'user':user}
+    return render(request, 'base/profile.html',context)
 
 
 

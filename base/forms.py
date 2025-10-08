@@ -3,5 +3,5 @@ from .models import Room
 class RoomForm(ModelForm):
     class Meta:
         model = Room
-        fields = '__all__'  # This will include all fields from the Room model
+        exclude=['host']  # This will include all fields except host from the Room model
         
