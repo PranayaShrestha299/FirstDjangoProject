@@ -7,7 +7,7 @@ class User(AbstractUser):
     bio=models.TextField(null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['name']
 # Create your models here.
 class Topic(models.Model):
     name = models.CharField(max_length=200)

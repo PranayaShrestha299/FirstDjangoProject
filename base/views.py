@@ -4,13 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Room
-from .forms import RoomForm,UserForm
-from .models import Topic,User
+from .forms import RoomForm,CustomUserCreationForm
+from .models import Topic
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 # Create your views here.
 
 #rooms = [
@@ -19,12 +21,12 @@ from django.contrib.auth.forms import UserCreationForm
 #    {'id': 3, 'name': 'Room C'}, ]
 def loginRegister(request):
     page='register'
-    form=UserCreationForm()
+    form=CustomUserCreationForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user=form.save(commit=False)
-            user.username=user.username.lower()
+            user.email=user.email.lower()
             user.save()
             login(request,user)
             return redirect('home')
@@ -124,9 +126,9 @@ def userProfile(request,pk):
 
 def updateUser(request):
     user=request.user
-    form=UserForm(instance=user)
+    form=CustomUserCreationForm(instance=user)
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
+        form = CustomUserCreationForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk=user.id)
