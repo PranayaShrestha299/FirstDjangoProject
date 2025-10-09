@@ -5,8 +5,8 @@ from django.shortcuts import redirect, render
 from django.db.models import Q
 from .models import Room
 from .forms import RoomForm,UserForm
-from .models import Topic
-from django.contrib.auth.models import User
+from .models import Topic,User
+
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -41,18 +41,17 @@ def loginPage(request):
     page='login'
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('username')
         password = request.POST.get('password')
         # Logic to authenticate user goes here
-        if request.user.is_authenticated:
-            return redirect('home')
-        try:
-            user = User.objects.get(username=username)  
         
-        except :
-            # User does not exist
+        try:
+            user = User.objects.get(email=email)  
+            
+        except User.DoesNotExist:
+                # User does not exist
             messages.error(request, 'User does not exist')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             return redirect('home')
