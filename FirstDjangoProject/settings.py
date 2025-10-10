@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'base.apps.BaseConfig',  # Custom app for the project
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,8 +125,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL= 'images/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']  # Directory for custom static files
+
+MEDIA_ROOT=BASE_DIR/'static/images/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
